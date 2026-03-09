@@ -5,7 +5,7 @@ clc
 
 %SECCIÓN 1
 %Declaración de variables simbólicas
-syms th1(t) th2(t) th3(t) th4(t) th5(t) th6(t) t l1 l2 l3 l4 l5
+syms th1(t) th2(t) th3(t) th4(t) th5(t) th6(t) t l1 l2 l3 l4 l5 l6
 
 %SECCIÓN 2
 %Configuración del robot, 0 para junta rotacional, 1 para junta prismática
@@ -13,7 +13,7 @@ RP = [0 0 0 0 0 0];
 
 %SECCIÓN 3
 %Creamos el vector de coordenadas articulares
-Q = [th1, th2, th3 th4(t) th5(t) th6(t)];
+Q = [th1, th2, th3 th4 th5 th6];
 disp('Coordenadas generalizadas');
 pretty (Q);
 
@@ -40,19 +40,15 @@ Rz1 = [cos(th1) -sin(th1)  0;
        sin(th1)  cos(th1)  0;
        0         0         1];
 
-Rx1_90 = [1 0 0;
-          0 0 -1;
-          0 1 0];
-
 Ry1_90 = [0 0 1;
           0 1 0;
          -1 0 0];
 
-R(:,:,1) = Rz1 * Rx1_90 * Ry1_90;
+R(:,:,1) = Rz1 * Ry1_90;
 
 %Junta 2
 %Posición de la junta 2 respecto a 1
-P(:,:,2)= [0; l2; 0];
+P(:,:,2)= [-l2*sin(th2); -l2*cos(th2); 0];
 %Matriz de rotación de la junta 2 respecto a 1
 R(:,:,2)= [cos(th2) -sin(th2)  0;
            sin(th2)  cos(th2)  0;
@@ -60,17 +56,17 @@ R(:,:,2)= [cos(th2) -sin(th2)  0;
 
 %Junta 3
 %Posición de la junta 3 respecto a 2
-P(:,:,3) = [-l3; 0; 0];
+P(:,:,3) = [-l3*sin(th3); -l3*cos(th3); 0];
 %Matriz de rotación de la junta 3 respecto a 2
 Rz3 = [cos(th3) -sin(th3)  0;
        sin(th3)  cos(th3)  0;
        0         0         1];
 
-Ry3_90n = [0 0 -1;
-           0 1 0;
-           1 0 0];
+Rx3_90 = [1 0 0;
+          0 0 -1;
+          0 1 0];
 
-R(:,:,3) = Rz3 * Ry3_90n;
+R(:,:,3) = Rz3 * Rx3_90;
 
 %Junta 4
 %Posición de la junta 4 respecto a 3
@@ -80,25 +76,25 @@ Rz4 = [cos(th4) -sin(th4)  0;
        sin(th4)  cos(th4)  0;
        0         0         1];
 
-Ry4_90n = [0 0 -1;
-           0 1 0;
-           1 0 0];
+Rx4_90 = [1 0 0;
+          0 0 -1;
+          0 1 0];
 
-R(:,:,4) = Rz4 * Ry4_90n;
+R(:,:,4) = Rz4 * Rx4_90;
 
 %Junta 5
 %Posición de la junta 5 respecto a 4
-P(:,:,5)= [l5; 0; 0];
+P(:,:,5)= [-l5*sin(th5); l5*cos(th5); 0];
 %Matriz de rotación de la junta 5 respecto a 4
 Rz5 = [cos(th5) -sin(th5)  0;
        sin(th5)  cos(th5)  0;
        0         0         1];
 
-Ry5_90 = [0 0 1;
-          0 1 0;
-         -1 0 0];
+Rx5_90n = [1 0 0;
+           0 0 1;
+           0 -1 0];
 
-R(:,:,5)= Rz5 * Ry5_90;
+R(:,:,5)= Rz5 * Rx5_90n;
 
 %Junta 6 
 %Posición de la junta 6 respecto a 5
