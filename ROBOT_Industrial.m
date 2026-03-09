@@ -5,7 +5,7 @@ clc
 
 %SECCIÓN 1
 %Declaración de variables simbólicas
-syms th1(t) th2(t) th3(t) th4(t) th5(t) th6(t) t l1 l2 l3 l4 l5 h
+syms th1(t) th2(t) th3(t) th4(t) th5(t) th6(t) t l1 l2 l3 l4 l5 l6 h
 
 %SECCIÓN 2
 %Configuración del robot, 0 para junta rotacional, 1 para junta prismática
@@ -13,7 +13,7 @@ RP = [0 0 0 0 0 0];
 
 %SECCIÓN 3
 %Creamos el vector de coordenadas articulares
-Q = [th1, th2, th3 th4(t) th5(t) th6(t)];
+Q = [th1, th2, th3 th4 th5 th6];
 disp('Coordenadas generalizadas');
 pretty (Q);
 
@@ -34,7 +34,7 @@ R = sym(zeros(3,3,GDL));
 
 %Junta 1
 %Posición de la junta 1 respecto a 0
-P(:,:,1)= [sqrt(l1^2-h)*sin(th1); sqrt(l1^2-h)*cos(th1); h];
+P(:,:,1)= [sqrt(l1^2-h)*cos(th1); sqrt(l1^2-h)*sin(th1); h];
 %Matriz de rotación de la junta 1 respecto a 0
 Rz1 = [cos(th1) -sin(th1)  0;
        sin(th1)  cos(th1)  0;
@@ -48,7 +48,7 @@ R(:,:,1) = Rz1 * Rx1_90;
 
 %Junta 2
 %Posición de la junta 2 respecto a 1
-P(:,:,2)= [-l2*cos(th2); l2*sin(th2); 0];
+P(:,:,2)= [l2*cos(th2); l2*sin(th2); 0];
 %Matriz de rotación de la junta 2 respecto a 1
 R(:,:,2)= [cos(th2) -sin(th2)  0;
            sin(th2)  cos(th2)  0;
@@ -84,7 +84,7 @@ R(:,:,4) = Rz4 * Ry4_90n;
 
 %Junta 5
 %Posición de la junta 5 respecto a 4
-P(:,:,5)= [l5; 0; 0];
+P(:,:,5)= [l5*cos(th5); l5*sin(th5); 0];
 %Matriz de rotación de la junta 5 respecto a 4
 Rz5 = [cos(th5) -sin(th5)  0;
        sin(th5)  cos(th5)  0;
@@ -98,7 +98,7 @@ R(:,:,5)= Rz5 * Ry5_90;
 
 %Junta 6 
 %Posición de la junta 6 respecto a 5
-P(:,:,6) = [0; 0; 0];
+P(:,:,6) = [0; 0; l6];
 %Matriz de rotación de la junta 6 respecto a 5
 R(:,:,6) = [cos(th6) -sin(th6) 0;
             sin(th6)  cos(th6) 0;
